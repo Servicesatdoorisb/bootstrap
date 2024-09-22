@@ -63,7 +63,7 @@
 </div>
 
 <script>
-    document.getElementById('uploadBtn').addEventListener('click', function() {
+    document.getElementById('uploadBtn').addEventListener('click', async function() {
         const fileInput = document.getElementById('cvFile');
         const message = document.getElementById('message');
 
@@ -82,13 +82,27 @@
             return;
         }
 
-        // Simulating file upload process
-        message.textContent = 'Uploading...';
-        setTimeout(() => {
-            message.textContent = 'File uploaded successfully!';
-            message.style.color = 'green';
-            fileInput.value = ''; // Reset the input
-        }, 2000);
+        const formData = new FormData();
+        formData.append('file', file);  // Append the file with the field name 'file'
+
+        try {
+            const response = await fetch('http://localhost:3000/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                const result = await response.text();
+                message.textContent = result;  // Show success message
+                message.style.color = 'green';
+                fileInput.value = ''; // Reset the input
+            } else {
+                message.textContent = 'Upload failed. Please try again.';
+                message.style.color = 'red';
+            }
+        } catch (error) {
+            message.textContent = 'Error uploading file: ' + error.message;
+            message.style.color = 'red';
+        }
     });
 </script>
 
