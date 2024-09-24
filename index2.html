@@ -58,7 +58,7 @@
 <div class="container">
     <h2>Upload Your CV</h2>
     <div class="file-upload">
-        <input type="file" id="cvFile" accept=".pdf, .doc, .docx" />
+        <input type="file" id="cvFile" accept=".pdf, .doc, .docx, .txt" />
         <label for="cvFile">Choose CV File</label>
     </div>
     <button id="uploadBtn">Upload</button>
@@ -70,6 +70,8 @@
 </div>
 
 <script>
+    //const uploadURL = 'http://localhost:3000'
+    const uploadURL = 'https://a2643904-1db2-4eee-bb12-7c4d2e4f7e4b-00-3sz70rpoozrex.pike.replit.dev'
     document.getElementById('uploadBtn').addEventListener('click', async function() {
         const fileInput = document.getElementById('cvFile');
         const message = document.getElementById('message');
@@ -81,10 +83,10 @@
         }
 
         const file = fileInput.files[0];
-        const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+        const allowedExtensions = /(\.txt|\.pdf|\.doc|\.docx)$/i;
 
         if (!allowedExtensions.exec(file.name)) {
-            message.textContent = 'Invalid file type. Please upload a PDF or DOC file.';
+            message.textContent = 'Invalid file type. Please upload a TEXT or PDF or DOC file.';
             message.style.color = 'red';
             return;
         }
@@ -93,7 +95,7 @@
         formData.append('file', file);
 
         try {
-            const response = await fetch('http://localhost:3000/upload', {
+            const response = await fetch(`${uploadURL}/upload`, {
                 method: 'POST',
                 body: formData,
             });
@@ -123,7 +125,7 @@
         }
 
         try {
-            const response = await fetch('http://localhost:3000/feedback', {
+            const response = await fetch(`${uploadURL}/feedback`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
